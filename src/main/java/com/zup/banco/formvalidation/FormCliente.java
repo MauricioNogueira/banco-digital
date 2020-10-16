@@ -6,6 +6,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 
+import com.zup.banco.customvalidation.IdadeValidation;
+
 public class FormCliente {
 	
 	@NotBlank(message = "Nome é obrigatório")
@@ -18,6 +20,7 @@ public class FormCliente {
 	@NotBlank(message = "E-mail é obrigatório")
 	private String email;
 	
+	@IdadeValidation
 	@NotNull(message = "Data de nascimento é obrigatório")
 	private Date dataNascimento;
 	

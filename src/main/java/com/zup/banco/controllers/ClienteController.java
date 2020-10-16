@@ -26,10 +26,9 @@ public class ClienteController {
 	@PostMapping
 	public ResponseEntity<ClienteDto> cadastrar(@Valid @RequestBody FormCliente form, UriComponentsBuilder uriComponentsBuilder) {
 		Cliente cliente = this.clienteService.cadastrar(form);
-		System.out.println(cliente);
 		
 		UriComponents uriComponents =
-                uriComponentsBuilder.path("/cliente/{id}").buildAndExpand(cliente.getId());
+                uriComponentsBuilder.path("/cliente/{id}/endereco").buildAndExpand(cliente.getId());
 		
 		return ResponseEntity.created(uriComponents.toUri()).body(new ClienteDto(cliente));
 	}
