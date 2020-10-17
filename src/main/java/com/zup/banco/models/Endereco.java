@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.zup.banco.dto.EnderecoDto;
 import com.zup.banco.formvalidation.FormEndereco;
 
 @Entity

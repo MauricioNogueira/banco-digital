@@ -2,6 +2,8 @@ package com.zup.banco.formvalidation;
 
 import javax.validation.constraints.NotNull;
 
+import com.zup.banco.customvalidation.CepValidation;
+
 public class FormEndereco {
 	@NotNull(message = "Campo obrigatório")
 	private String cep;
@@ -18,6 +20,7 @@ public class FormEndereco {
 	@NotNull(message = "Campo obrigatório")
 	private String estado;
 	
+	@CepValidation
 	public String getCep() {
 		return cep;
 	}
