@@ -2,11 +2,14 @@ package com.zup.banco.models;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import com.zup.banco.formvalidation.FormCliente;
 
@@ -27,6 +30,10 @@ public class Cliente {
 	@Column(unique=true)
 	private String cpf;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "endereco_id", referencedColumnName = "id")
+	private Endereco endereco;
+
 	public Cliente() {}
 	
 	public Cliente(FormCliente form) {
@@ -59,5 +66,13 @@ public class Cliente {
 	
 	public String getCpf() {
 		return cpf;
+	}
+	
+	public Endereco getEndereco() {
+		return endereco;
+	}
+	
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 }

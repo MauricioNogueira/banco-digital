@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.zup.banco.dto.ClienteDto;
 import com.zup.banco.dto.NaoEncontradoDto;
 import com.zup.banco.formvalidation.FormCliente;
+import com.zup.banco.formvalidation.FormEndereco;
 import com.zup.banco.models.Cliente;
 import com.zup.banco.service.ClienteService;
 
@@ -48,7 +49,16 @@ public class ClienteController {
 	}
 	
 	@PostMapping("/{id}/endereco")
-	public void cadastrarEndereco() {
+	public ResponseEntity<ClienteDto> cadastrarEndereco(@Valid @RequestBody FormEndereco form, @PathVariable Long id, UriComponentsBuilder uriComponentsBuilder) {
+		ClienteDto clienteDto = this.clienteService.cadastrarEndereco(form, id);
 		
+		UriComponents uriComponents =
+                uriComponentsBuilder.path("/cliente/{id}/anexo").buildAndExpand(id);
+		
+		if (clienteDto != null) {
+			return ResponseEntity.created(uriComponents.toUri()).body(clienteDto);
+		}
+		
+		return null;
 	}
 }
