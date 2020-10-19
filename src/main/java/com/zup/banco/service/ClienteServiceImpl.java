@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.zup.banco.dto.ClienteDto;
+import com.zup.banco.dto.DadosClienteDto;
 import com.zup.banco.dto.NaoEncontradoDto;
 import com.zup.banco.formvalidation.FormCliente;
 import com.zup.banco.formvalidation.FormEndereco;
@@ -68,6 +69,7 @@ public class ClienteServiceImpl implements ClienteService {
 	public ResponseEntity<?> uploadImagem(MultipartFile multipartFile, Long id, UriComponentsBuilder uriComponentsBuilder) {
 		Optional<Cliente> optional = this.clienteRepository.findById(id);
 		Cliente cliente = null;
+		ResponseEntity<DadosClienteDto> response = null;
 		
 		try {
 			if (optional.isPresent()) {
@@ -79,19 +81,32 @@ public class ClienteServiceImpl implements ClienteService {
 			Arquivo arquivo = new Arquivo(multipartFile.getOriginalFilename(), pathImagem);
 			cliente.setArquivo(arquivo);
 			
-			if (pathImagem == null || cliente.getArquivo() == null ||cliente.getEndereco() == null) {
+			if (pathImagem == null) {
 				return ResponseEntity.badRequest().body(new NaoEncontradoDto());
 			}
 			
+			UriComponents uriComponents =
+	                uriComponentsBuilder.path("/cliente/{id}/finalizar").buildAndExpand(id);
+			
 			this.clienteRepository.save(cliente);
+			
+			response = ResponseEntity.created(uriComponents.toUri()).body(new DadosClienteDto(cliente));
 			
 		} catch (NullPointerException nullPointerException) {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new NaoEncontradoDto());
 		}
 		
-		UriComponents uriComponents =
-                uriComponentsBuilder.path("/cliente/{id}/finalizar").buildAndExpand(id);
+		return response;
+	}
+
+	@Override
+	public DadosClienteDto visualizarDados(Long id) {
+		Optional<Cliente> optional = this.clienteRepository.findById(id);
 		
-		return ResponseEntity.created(uriComponents.toUri()).body(new ClienteDto(cliente));
+		if (optional.isPresent()) {
+			return new DadosClienteDto(optional.get());
+		}
+		
+		return null;
 	}
 }

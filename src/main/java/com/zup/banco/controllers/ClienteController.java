@@ -3,6 +3,7 @@ package com.zup.banco.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.zup.banco.dto.ClienteDto;
+import com.zup.banco.dto.DadosClienteDto;
 import com.zup.banco.dto.ErroFileValidacao;
 import com.zup.banco.dto.NaoEncontradoDto;
 import com.zup.banco.formvalidation.FormCliente;
@@ -75,5 +77,16 @@ public class ClienteController {
 		}
 		
 		return this.clienteService.uploadImagem(file, id, uriComponentsBuilder);
+	}
+	
+	@GetMapping("/{id}/visualizar")
+	public ResponseEntity<DadosClienteDto> verificarDados(@PathVariable Long id) {
+		DadosClienteDto dadosClienteDto = this.clienteService.visualizarDados(id);
+		
+		if (dadosClienteDto == null) {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+		}
+		
+		return ResponseEntity.ok(dadosClienteDto);
 	}
 }
