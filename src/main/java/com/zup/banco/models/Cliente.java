@@ -33,6 +33,10 @@ public class Cliente {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "endereco_id", referencedColumnName = "id")
 	private Endereco endereco;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "arquivo_id", referencedColumnName = "id")
+	private Arquivo arquivo;
 
 	public Cliente() {}
 	
@@ -74,5 +78,13 @@ public class Cliente {
 	
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+
+	public Arquivo getArquivo() {
+		return arquivo;
+	}
+
+	public void setArquivo(Arquivo arquivo) {
+		this.arquivo = arquivo;
 	}
 }

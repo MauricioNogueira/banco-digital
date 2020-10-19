@@ -2,6 +2,7 @@ package com.zup.banco.dto;
 
 import java.util.Date;
 
+import com.zup.banco.models.Arquivo;
 import com.zup.banco.models.Cliente;
 import com.zup.banco.models.Endereco;
 
@@ -12,6 +13,7 @@ public class ClienteDto {
 	private Date dataNascimento;
 	private String cpf;
 	private Endereco endereco;
+	private Arquivo arquivo;
 	
 	public ClienteDto(Cliente cliente) {
 		this.nome = cliente.getNome();
@@ -20,6 +22,7 @@ public class ClienteDto {
 		this.dataNascimento = cliente.getDataNascimento();
 		this.cpf = cliente.getCpf();
 		this.endereco = cliente.getEndereco();
+		this.arquivo = cliente.getArquivo();
 	}
 
 	public String getNome() {
@@ -44,5 +47,9 @@ public class ClienteDto {
 	
 	public Endereco getEndereco() {
 		return this.endereco;
+	}
+
+	public Arquivo getArquivo() {
+		return arquivo;
 	}
 }
