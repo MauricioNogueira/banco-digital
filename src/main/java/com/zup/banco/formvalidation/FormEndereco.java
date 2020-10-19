@@ -1,22 +1,29 @@
 package com.zup.banco.formvalidation;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.zup.banco.customvalidation.CepValidation;
 
 public class FormEndereco {
+	
+	@NotBlank(message = "Campo está em branco")
 	@NotNull(message = "Campo obrigatório")
 	private String cep;
 	
+	@NotBlank(message = "Campo está em branco")
 	@NotNull(message = "Campo obrigatório")
 	private String rua;
 	
+	@NotBlank(message = "Campo está em branco")
 	@NotNull(message = "Campo obrigatório")
 	private String complemento;
 	
+	@NotBlank(message = "Campo está em branco")
 	@NotNull(message = "Campo obrigatório")
 	private String cidade;
 	
+	@NotBlank(message = "Campo está em branco")
 	@NotNull(message = "Campo obrigatório")
 	private String estado;
 	

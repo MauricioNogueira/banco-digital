@@ -76,14 +76,22 @@ public class ClienteServiceImpl implements ClienteService {
 				cliente = optional.get();
 			}
 			
-			String pathImagem = this.arquivoService.uploadImagem(multipartFile);
+			VerificaDadosCliente verificaDadosCliente = new VerificaCliente(cliente, "arquivo");
+			boolean verificaIntegridadeDados = verificaDadosCliente.check();
 			
-			Arquivo arquivo = new Arquivo(multipartFile.getOriginalFilename(), pathImagem);
-			cliente.setArquivo(arquivo);
+			if (!verificaIntegridadeDados) {
+				return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new NaoEncontradoDto());
+			}
+			
+			String pathImagem = this.arquivoService.uploadImagem(multipartFile);
 			
 			if (pathImagem == null) {
 				return ResponseEntity.badRequest().body(new NaoEncontradoDto());
 			}
+			
+			Arquivo arquivo = new Arquivo(multipartFile.getOriginalFilename(), pathImagem);
+			cliente.setArquivo(arquivo);
+			
 			
 			UriComponents uriComponents =
 	                uriComponentsBuilder.path("/cliente/{id}/finalizar").buildAndExpand(id);
@@ -101,10 +109,14 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	public DadosClienteDto visualizarDados(Long id) {
-		Optional<Cliente> optional = this.clienteRepository.findById(id);
-		
-		if (optional.isPresent()) {
-			return new DadosClienteDto(optional.get());
+		try {
+			Optional<Cliente> optional = this.clienteRepository.findById(id);
+			
+			if (optional.isPresent()) {
+				return new DadosClienteDto(optional.get());
+			}
+		} catch (NullPointerException e) {
+			return null;
 		}
 		
 		return null;

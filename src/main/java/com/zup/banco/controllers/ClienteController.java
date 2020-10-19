@@ -80,11 +80,11 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/{id}/visualizar")
-	public ResponseEntity<DadosClienteDto> verificarDados(@PathVariable Long id) {
+	public ResponseEntity<?> verificarDados(@PathVariable Long id) {
 		DadosClienteDto dadosClienteDto = this.clienteService.visualizarDados(id);
 		
 		if (dadosClienteDto == null) {
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new NaoEncontradoDto());
 		}
 		
 		return ResponseEntity.ok(dadosClienteDto);
