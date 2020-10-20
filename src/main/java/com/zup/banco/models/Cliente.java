@@ -10,11 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.zup.banco.formvalidation.FormCliente;
 
 
 @Entity
+@Table(name = "clientes")
 public class Cliente {
 	
 	@Id
@@ -24,7 +26,9 @@ public class Cliente {
 	private String nome;
 	private String sobrenome;
 	
+	@Column(unique=true)
 	private String email;
+	
 	private Date dataNascimento;
 	
 	@Column(unique=true)
@@ -38,7 +42,12 @@ public class Cliente {
 	@JoinColumn(name = "arquivo_id", referencedColumnName = "id")
 	private Arquivo arquivo;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "conta_id", referencedColumnName = "id")
+	private Conta conta;
+	
 	private Boolean aceito;
+	private Boolean enviado = false;
 
 	public Cliente() {}
 	
@@ -96,5 +105,21 @@ public class Cliente {
 
 	public void setAceito(Boolean aceito) {
 		this.aceito = aceito;
+	}
+
+	public Boolean getEnviado() {
+		return enviado;
+	}
+
+	public void setEnviado(Boolean enviado) {
+		this.enviado = enviado;
+	}
+
+	public Conta getConta() {
+		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 }

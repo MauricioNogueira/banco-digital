@@ -42,7 +42,7 @@ public class ErroValidacaoUniqueHandle {
 		String campo = texto.substring(((posicoes.get(0)) + 1), ((posicoes.get(2))));
 		String value = texto.substring(((posicoes.get(1)) + 1), ((posicoes.get(3))));
 		
-		erro.add(new ErroFormularioDto(campo, "CPF já está cadastrado no sistema"));
+		erro.add(new ErroFormularioDto(campo, campo+" já está cadastrado no sistema"));
 		
 		return erro;
 	}
