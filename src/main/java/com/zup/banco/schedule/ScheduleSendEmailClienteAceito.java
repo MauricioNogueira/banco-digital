@@ -13,7 +13,7 @@ import com.zup.banco.email.SendEmail;
 import com.zup.banco.models.Cliente;
 import com.zup.banco.models.Conta;
 import com.zup.banco.repository.ClienteRepository;
-import com.zup.banco.service.BancoService;
+import com.zup.banco.service.ContaService;
 
 @Component
 @EnableScheduling
@@ -26,7 +26,7 @@ public class ScheduleSendEmailClienteAceito {
 	private SendEmail sendEmail;
 	
 	@Autowired
-	private BancoService bancoService;
+	private ContaService contaService;
 	
 	private final long TIME = 4000;
 	
@@ -36,9 +36,11 @@ public class ScheduleSendEmailClienteAceito {
 		
 		
 		clientes.forEach(cliente -> {			
-			Conta conta = this.bancoService.criarConta();
+			Conta conta = this.contaService.criarConta();
 			cliente.setConta(conta);
-			boolean isSend = this.sendEmail.sendNotification(cliente);
+			String titulo = "Dados da sua conta";
+			String texto = "Agencia: "+cliente.getConta().getAgencia()+" | codigo do banco: "+cliente.getConta().getCodigoBanco()+" | Conta: "+cliente.getConta().getConta();
+			boolean isSend = this.sendEmail.sendNotification(cliente.getEmail(), titulo, texto);
 			cliente.setEnviado(isSend);
 			
 			this.clienteRepository.save(cliente);

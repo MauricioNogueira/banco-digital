@@ -7,8 +7,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.zup.banco.models.Cliente;
-
 @Service
 public class SendEmail {
 	
@@ -22,14 +20,14 @@ public class SendEmail {
 		this.javaMailSender = javaMailSender;
 	}
 	
-	public boolean sendNotification(Cliente cliente) {
+	public boolean sendNotification(String email, String titulo, String mensagem) {
 		try {			
 			System.out.println("Enviando email...");
 			SimpleMailMessage mail = new SimpleMailMessage();
-			mail.setTo(cliente.getEmail());
+			mail.setTo(email);
 			mail.setFrom(this.fromMail);
-			mail.setSubject("Dados de sua conta");
-			mail.setText("Agencia: "+cliente.getConta().getAgencia()+" | codigo do banco: "+cliente.getConta().getCodigoBanco()+" | Conta: "+cliente.getConta().getConta());
+			mail.setSubject(titulo);
+			mail.setText(mensagem);
 			
 			this.javaMailSender.send(mail);
 			System.out.println("Email enviado");			

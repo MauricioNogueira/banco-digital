@@ -1,9 +1,11 @@
 package com.zup.banco.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,8 +20,13 @@ public class Conta {
 	private String conta;
 	private String codigoBanco;
 	private double saldo;
+	private String senha;
 	@OneToOne(mappedBy = "conta")
 	private Cliente cliente;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "autenticacao_id", referencedColumnName = "id")
+	private Autenticacao autenticacao;
 	
 	public Conta() {}
 	
@@ -52,5 +59,21 @@ public class Conta {
 
 	public Cliente getCliente() {
 		return cliente;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public Autenticacao getAutenticacao() {
+		return autenticacao;
+	}
+
+	public void setAutenticacao(Autenticacao autenticacao) {
+		this.autenticacao = autenticacao;
 	}
 }
