@@ -1,18 +1,26 @@
 package com.zup.banco.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.zup.banco.dto.TransferenciaDto;
 import com.zup.banco.email.SendEmail;
 import com.zup.banco.formvalidation.FormGeraSenha;
 import com.zup.banco.formvalidation.FormPrimeiroAcessoConta;
 import com.zup.banco.models.Autenticacao;
 import com.zup.banco.models.Cliente;
 import com.zup.banco.models.Conta;
+import com.zup.banco.models.Transferencia;
 import com.zup.banco.repository.ClienteRepository;
+import com.zup.banco.repository.ContaRepository;
+import com.zup.banco.repository.TransferenciaRepository;
 import com.zup.banco.response.Response;
 
 @Service
@@ -23,6 +31,12 @@ public class ContaServiceImpl implements ContaService {
 	
 	@Autowired
 	private AutenticacaoService autenticacaoService;
+	
+	@Autowired
+	private TransferenciaRepository transferenciaRepository;
+	
+	@Autowired
+	private ContaRepository contaRepository;
 	
 	@Autowired
 	private SendEmail sendEmail;
@@ -107,5 +121,38 @@ public class ContaServiceImpl implements ContaService {
 		} catch (NullPointerException e) {
 			return new Response(5, "Cliente não foi encontrado");
 		}
+	}
+
+	@Async
+	@Override
+	public void deposito(List<TransferenciaDto> transferencias) {
+		List<TransferenciaDto> transferenciaAceita = new ArrayList<TransferenciaDto>();
+		
+		transferencias.forEach(transferencia -> {
+			Transferencia trans = this.transferenciaRepository.findByCodigoUnico(transferencia.getCodigoUnico());
+			
+			if (trans == null && verificaCampos(transferencia)) {
+				transferenciaAceita.add(transferencia);
+			}
+		});
+		System.out.println(transferenciaAceita.size());
+		
+		System.out.println(transferencias.size());
+		if (transferenciaAceita.size() == transferencias.size()) {
+			System.out.println("Tudo certo");
+		} else {
+			System.out.println("Tudo errado");
+		}
+	}
+	
+	public boolean verificaCampos(TransferenciaDto transferencia) {
+		System.out.println(transferencia.getValorTransferencia());
+		if (transferencia.getAgenciaDestino() != null && transferencia.getAgenciaOrigem() != null && transferencia.getBancoOrigem() != null && transferencia.getCodigoUnico() != null && transferencia.getContaOrigem() != null && transferencia.getDataRealizacao() != null && transferencia.getDocumentoIdentificador() != null && transferencia.getValorTransferencia() != 0) {
+			System.out.println("True");
+			return true;
+		}
+		System.out.println("false");
+		
+		return false;
 	}
 }

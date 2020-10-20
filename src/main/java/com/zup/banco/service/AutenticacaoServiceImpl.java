@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.zup.banco.models.Autenticacao;
@@ -17,12 +18,15 @@ import com.zup.banco.response.Response;
 
 @Service
 public class AutenticacaoServiceImpl implements AutenticacaoService {
+	
+	@Value("${time.token}")
+	private int timeToken;
 
 	@Override
 	public Cliente criarToken(Cliente cliente) {
 		String digitos = String.valueOf((int) ((Math.random() * (999999 - 100000)) + 100000));
 		Calendar cal = Calendar.getInstance(); // pega a data e hora atual
-		cal.add(Calendar.SECOND, 60);
+		cal.add(Calendar.SECOND, this.timeToken);
 		long dataExpiracao = cal.getTimeInMillis();
 		
 		Autenticacao auth = new Autenticacao();

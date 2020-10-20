@@ -1,16 +1,22 @@
 package com.zup.banco.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zup.banco.dto.TransferenciaDto;
 import com.zup.banco.formvalidation.FormGeraSenha;
 import com.zup.banco.formvalidation.FormPrimeiroAcessoConta;
+import com.zup.banco.formvalidation.FormTransferencia;
+import com.zup.banco.models.Transferencia;
 import com.zup.banco.response.Response;
 import com.zup.banco.service.ContaService;
 
@@ -44,8 +50,11 @@ public class ContaController {
 		return ResponseEntity.badRequest().body(response);
 	}
 	
-	@PostMapping("/transferencias")
-	public void recebeTransferencia() {
+	@PostMapping(path = "/deposito", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+		    consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_ATOM_XML_VALUE})
+	public void recebeTransferencia(@RequestBody List<TransferenciaDto> transferencias) {
+		this.contaService.deposito(transferencias);
 		
+		System.out.println("Fim da transferencia");
 	}
 }
