@@ -18,10 +18,12 @@ import com.zup.banco.dto.DadosClienteDto;
 import com.zup.banco.dto.NaoEncontradoDto;
 import com.zup.banco.formvalidation.FormCliente;
 import com.zup.banco.formvalidation.FormEndereco;
+import com.zup.banco.formvalidation.FormFinalizarCadastro;
 import com.zup.banco.models.Arquivo;
 import com.zup.banco.models.Cliente;
 import com.zup.banco.models.Endereco;
 import com.zup.banco.repository.ClienteRepository;
+import com.zup.banco.response.Resposta;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -117,6 +119,30 @@ public class ClienteServiceImpl implements ClienteService {
 			}
 		} catch (NullPointerException e) {
 			return null;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public Resposta finalizarCadastro(FormFinalizarCadastro form, Long id) {
+		Optional<Cliente> optional = this.clienteRepository.findById(id);
+		
+		if (optional.isPresent()) {
+			
+			Cliente cliente = optional.get();
+			
+			VerificaDadosCliente verificaDadosCliente = new VerificaCliente(cliente, "");
+			
+			if (!verificaDadosCliente.check()) {
+				return null;
+			}
+			
+			cliente.setAceito(form.isAceita());
+			
+			this.clienteRepository.save(cliente);
+			
+			return new Resposta("Cadastro efetuado com sucesso");
 		}
 		
 		return null;

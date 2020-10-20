@@ -37,6 +37,8 @@ public class Cliente {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "arquivo_id", referencedColumnName = "id")
 	private Arquivo arquivo;
+	
+	private Boolean aceito;
 
 	public Cliente() {}
 	
@@ -86,5 +88,13 @@ public class Cliente {
 
 	public void setArquivo(Arquivo arquivo) {
 		this.arquivo = arquivo;
+	}
+
+	public Boolean getAceito() {
+		return aceito;
+	}
+
+	public void setAceito(Boolean aceito) {
+		this.aceito = aceito;
 	}
 }

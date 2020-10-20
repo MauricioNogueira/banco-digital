@@ -23,7 +23,9 @@ import com.zup.banco.dto.ErroFileValidacao;
 import com.zup.banco.dto.NaoEncontradoDto;
 import com.zup.banco.formvalidation.FormCliente;
 import com.zup.banco.formvalidation.FormEndereco;
+import com.zup.banco.formvalidation.FormFinalizarCadastro;
 import com.zup.banco.models.Cliente;
+import com.zup.banco.response.Resposta;
 import com.zup.banco.service.ClienteService;
 import com.zup.banco.service.S3Service;
 
@@ -88,5 +90,16 @@ public class ClienteController {
 		}
 		
 		return ResponseEntity.ok(dadosClienteDto);
+	}
+	
+	@PostMapping("/{id}/finalizar")
+	public ResponseEntity<Resposta> finalizarCadastro(@RequestBody FormFinalizarCadastro form, @PathVariable Long id) {
+		Resposta resposta = this.clienteService.finalizarCadastro(form, id);
+		
+		if (resposta == null) {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new Resposta("Seus dados estão incompletos"));
+		}
+		
+		return ResponseEntity.ok(resposta);
 	}
 }
